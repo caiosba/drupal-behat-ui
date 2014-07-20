@@ -35,6 +35,6 @@ If you don't know from where to start, please check the file sample-test-suite.z
 
 Check [this video](http://ca.ios.ba/files/drupal/behatui.ogv) to understand better how it works.
 
-Check the module on [Github](https://github.com/caiosba/drupal-behat-ui).
+Check the module on [Drupal.org](https://www.drupal.org/project/behat_ui).
 
 This module was sponsored by [Meedan](http://meedan.org).
