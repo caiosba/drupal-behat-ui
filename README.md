@@ -10,6 +10,7 @@ Features on running an existing test suite:
 * The Behat binary and behat.yml can be located at any place, you just need to provide the path to them
 * HTTP authentication, for both headless testing and real browser testing (Selenium)
 * Tests run on background, the module checks for the process periodically and the output is updated on the screen (because some large test suites can take even hours to run)
+* Kill execution
 * Colored and meaningful output
 
 Features on creating a new test (scenario) through the interface:

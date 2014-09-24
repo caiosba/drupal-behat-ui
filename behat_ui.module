@@ -57,6 +57,12 @@ function behat_ui_menu() {
     'type' => MENU_CALLBACK
   );
 
+  $items['behat-ui/kill'] = array(
+    'page callback' => '_behat_ui_kill',
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
@@ -121,7 +127,7 @@ function _behat_ui_settings($form, $form_state) {
     '#description' => t('Sometimes testing using Selenium (or other driver that allows JavaScript) does not handle HTTP authentication well, for example when you have some link with some JavaScript behavior attached. On these cases, you may enable this HTTP authentication only for headless testing and find another solution for drivers that allow JavaScript (for example, with Selenium + JavaScript you can use the extension Auto Auth and save the credentials on a Firefox profile).'),
   );
 
-  $label = t('Running');
+  $label = t('Running <small><a href="#" id="behat-ui-kill">(kill)</a></small>');
   $class = 'running';
   if (!$pid) {
     $label = t('Not running');
@@ -542,4 +548,23 @@ function _behat_ui_status() {
   }
 
   drupal_json_output(array('running' => $running, 'output' => $output));
+}
+
+/**
+ * Function to kill a process.
+ */
+function _behat_ui_kill() {
+  $pidfile = variable_get('behat_ui_pidfile', '');
+  $pid = empty($pidfile) ? 0 : intval(trim(file_get_contents($pidfile)));
+  $response = FALSE;
+
+  if ($pid) {
+    try {
+      $response = posix_kill($pid, SIGKILL);
+    } catch (Exception $e) {
+      $response = FALSE;
+    }
+  }
+
+  drupal_json_output(array('response' => $response));
 }
