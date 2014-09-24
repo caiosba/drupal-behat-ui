@@ -12,6 +12,7 @@ Features on running an existing test suite:
 * Tests run on background, the module checks for the process periodically and the output is updated on the screen (because some large test suites can take even hours to run)
 * Kill execution
 * Colored and meaningful output
+* You can run the testing suite using Drush: `drush bui` or `drush behat-ui`
 
 Features on creating a new test (scenario) through the interface:
 
