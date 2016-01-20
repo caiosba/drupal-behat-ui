@@ -33,6 +33,11 @@ Check the example FeatureContext.php file for two examples of useful steps:
 * Take screenshot (very useful for debugging specially if you run Selenium headless, using XVFB or something like that)
 * HTTP authentication
 
+You can run the tests using PhantomJS instead of Selenium. In order to do that, just run PhantomJS on port
+8643, this way: `phantomjs --webdriver=8643 --cookies-file=/tmp/cookies.txt`. In that case, you should put
+the path `http://localhost:8643/wd/hub` as the `wd_host` in `behat.yml`. It didn't work with PhantomJS 2.0,
+but it does work with PhantomJS 1.9.8.
+
 If you don't know from where to start, please check the file sample-test-suite.zip.
 
 Check [this video](http://ca.ios.ba/files/drupal/behatui.ogv) to understand better how it works.
