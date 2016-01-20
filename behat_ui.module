@@ -228,21 +228,25 @@ function _behat_ui_new($form, $form_state) {
     '#suffix' => '</div>',
   );
 
-  if (!isset($form_state['storage'])) {
-    $form_state['storage'] = array('steps' => count($form_state['input']['behat_ui_steps']));
+  if (!isset($form_state['input'])) {
+    $form_state['input'] = array();
   }
 
   // Remove blank steps
   if (!isset($form_state['input']['behat_ui_steps'])) {
     $form_state['input']['behat_ui_steps'] = array();
   }
+
+  if (!isset($form_state['storage'])) {
+    $form_state['storage'] = array('steps' => count($form_state['input']['behat_ui_steps']));
+  }
+
   foreach ($form_state['input']['behat_ui_steps'] as $id => $input) {
     if (empty($input['type']) && empty($input['step'])) {
       unset($form_state['input']['behat_ui_steps'][$id]);
       $form_state['storage']['steps']--;
     }
   }
-
   $form_state['storage']['steps']++;
 
   if ($form_state['storage']['steps']) {
