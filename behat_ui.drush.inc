@@ -46,8 +46,8 @@ function drush_behat_ui() {
     $url = preg_replace('/([^\/])$/', "$1/", $url);
   }
 
-  $behat_bin = variable_get('behat_ui_behat_bin_path');
-  $behat_config_path = variable_get('behat_ui_behat_config_path');
+  $behat_bin = _behat_ui_get_behat_bin_path();
+  $behat_config_path = _behat_ui_get_behat_config_path();
 
   $tmp = file_directory_temp();
   $cmd = "MINK_EXTENSION_PARAMS='base_url=$url' php $behat_bin";

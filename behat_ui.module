@@ -342,6 +342,14 @@ function _behat_ui_generate_scenario($form_state) {
   return $scenario;
 }
 
+function _behat_ui_get_behat_bin_path() {
+  return preg_replace('/[ ;&|,]/', '', variable_get('behat_ui_behat_bin_path', 'bin/behat'));
+}
+
+function _behat_ui_get_behat_config_path() {
+  return preg_replace('/[ ;&|,]/', '', variable_get('behat_ui_behat_config_path', '.'));
+}
+
 /**
  * Run a single test.
  */
@@ -359,8 +367,8 @@ function _behat_ui_run_single_test($form, &$form_state) {
   fclose($handle);
 
   // Run file
-  $behat_bin = variable_get('behat_ui_behat_bin_path', 'bin/behat');
-  $behat_config = variable_get('behat_ui_behat_config_path', '.');
+  $behat_bin = _behat_ui_get_behat_bin_path();
+  $behat_config = _behat_ui_get_behat_config_path();
   $output = shell_exec("cd $behat_config; (MINK_EXTENSION_PARAMS='base_url=$base_root' php $behat_bin -f html $file 2>&1)");
 
   unlink($file);
@@ -422,8 +430,8 @@ function _behat_ui_steps() {
     return $cache->data;
   }
 
-  $behat_bin = variable_get('behat_ui_behat_bin_path', 'bin/behat');
-  $behat_config_path = variable_get('behat_ui_behat_config_path', '.');
+  $behat_bin = _behat_ui_get_behat_bin_path();
+  $behat_config_path = _behat_ui_get_behat_config_path();
 
   global $base_root;
   $cmd = "cd $behat_config_path; (MINK_EXTENSION_PARAMS='base_url=$base_root' php $behat_bin -dl | sed 's/^\s*//g' | sort)";
@@ -485,10 +493,11 @@ function _behat_ui_submit($form, &$form_state) {
 
   // Paths
 
-  $behat_bin = $form_state['values']['behat_ui_behat_bin_path'];
-  variable_set('behat_ui_behat_bin_path', $behat_bin);
-  $behat_config_path = $form_state['values']['behat_ui_behat_config_path'];
-  variable_set('behat_ui_behat_config_path', $behat_config_path);
+  variable_set('behat_ui_behat_bin_path', $form_state['values']['behat_ui_behat_bin_path']);
+  variable_set('behat_ui_behat_config_path', $form_state['values']['behat_ui_behat_config_path']);
+
+  $behat_bin = _behat_ui_get_behat_bin_path();
+  $behat_config_path = _behat_ui_get_behat_config_path();
 
   // HTTP authentication
 
