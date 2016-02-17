@@ -13,6 +13,7 @@ Features on running an existing test suite:
 * Kill execution
 * Colored and meaningful output
 * You can run the testing suite using Drush: `drush bui` or `drush behat-ui`
+* Export output as HTML or plain text
 
 Features on creating a new test (scenario) through the interface:
 
