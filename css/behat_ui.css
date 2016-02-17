@@ -194,3 +194,7 @@
 #behat-ui-new-steps .remove:hover {
   background-image: url(remove-hover.png);
 }
+
+#behat-ui-status a.download {
+  margin-left: 18px;
+}

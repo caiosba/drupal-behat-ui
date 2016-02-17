@@ -63,6 +63,13 @@ function behat_ui_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['behat-ui/download/%'] = array(
+    'page callback' => '_behat_ui_download',
+    'page arguments' => array(2),
+    'access arguments' => array('administer site configuration'),
+    'type' => MENU_CALLBACK,
+  );
+
   return $items;
 }
 
@@ -558,7 +565,8 @@ function _behat_ui_status() {
 
     if (!$running) {
       unlink($pidfile);
-      unlink($outfile);
+      $tmp = file_directory_temp();
+      rename($outfile, $tmp . '/behat_ui_output.html');
       variable_set('behat_ui_pidfile', '');
       variable_set('behat_ui_outfile', '');
     }
@@ -584,4 +592,37 @@ function _behat_ui_kill() {
   }
 
   drupal_json_output(array('response' => $response));
+}
+
+/**
+ * Save output.
+ */
+function _behat_ui_download($format) {
+  $tmp = file_directory_temp();
+  $output = $tmp . '/behat_ui_output.html';
+
+  if (($format === 'html' || $format === 'txt') && file_exists($output)) {
+    $headers = array(
+      'Content-Type' => 'text/x-behat',
+      'Content-Disposition' => 'attachment; filename="behat_ui_output.' . $format . '"',
+      'Content-Length' => filesize($output),
+    );
+    foreach ($headers as $key => $value) {
+      drupal_add_http_header($key, $value);
+    }
+    if ($format === 'html') {
+      readfile($output);
+    }
+    else if ($format === 'txt') {
+      drupal_add_http_header('Connection', 'close');
+      $plain = file_get_contents($output);
+      $plain = preg_replace('/<(script|style)(.*?)>(.*?)<\/(script|style)>/s', '', $plain);
+      $plain = preg_replace('/<div class="switchers">(.*?)<\/div>/s', '', $plain);
+      echo drupal_html_to_text($plain);
+    }
+  }
+  else {
+    drupal_set_message(t('Output file not found. Please run the tests again in order to generate it.'), 'error');
+    drupal_goto('admin/config/development/behat_ui');
+  }
 }

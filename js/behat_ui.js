@@ -40,7 +40,12 @@ jQuery(function($) {
           killProcess();
           setTimeout(checkStatus, 10000);
         } else {
-          $stat.find('span').html(Drupal.t('Not running'));
+          var download = ' <a href="' + Drupal.settings.basePath + 'behat-ui/download/html" class="download">' + Drupal.t('Download output as HTML') + '</a>' +
+                         ' <a href="' + Drupal.settings.basePath + 'behat-ui/download/txt" class="download">' + Drupal.t('Download output as plain text') + '</a>';
+          if (!data.output) {
+            download = '';
+          }
+          $stat.find('span').html(Drupal.t('Not running') + download);
         }
 
         $output.html(data.output);
